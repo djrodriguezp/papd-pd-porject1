@@ -7,20 +7,28 @@ shinyUI(fluidPage(
 
     titlePanel("Erupciones Volcanicas"),
     
-    tabsetPanel(selected="Graficas", 
+    tabsetPanel(#selected="Graficas", 
                 tabPanel("Dataset y Mapa", 
                          fluidRow(
-                             
-                             column(12,
+                           column(6,
+                                  plotOutput("eruptionsByYear", 
+                                             dblclick = "mouse_dblclick",
+                                             brush = brushOpts("mouse_brush", resetOnNew = T, direction = "x"))
+                                  
+                           ),
+                             column(6,
                                     leafletOutput("worldmap", width = "100%", height = 500),
-                                    DT::dataTableOutput("dataset_tbl_map")
+                                    
                              )
-                         )
+                         ),
+                         fluidRow(column(12),
+                                  DT::dataTableOutput("dataset_tbl_map")
+                                  )
                ),
                 tabPanel("Graficas",  
                          sidebarLayout(
                            sidebarPanel(
-                             selectInput("plots_xvar","Variable X", c("Volcano.Name","Country", "year"), selected = "Volcano.Name"),
+                             selectInput("plots_xvar","Variable X", c("volcano_name","country", "year"), selected = "volcano_name"),
                              numericInput("plots_top", "Cantidad de Resultados", value=10),
                              selectInput("plots_order","Tipo de Orden", c("Ascendente","Descendente"), selected = "Descendente"),
                              sliderInput("plots_year", "Año Erupción", 

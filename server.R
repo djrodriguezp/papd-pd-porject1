@@ -4,28 +4,58 @@ library(shiny)
 library(ggplot2)
 
 
+brushed_dataset <- NULL
+
 shinyServer(function(input, output, session) {
   filteredTable_data <- reactive({
+    filtered_dataset <- dataset
+    if(!is.null(brushed_dataset)){
+      filtered_dataset <- brushed_dataset 
+    }
     if(length(input$dataset_tbl_map_rows_selected) > 0){
-      dataset %>%  
+      filtered_dataset %>%  
         filter(row_number() %in% input$dataset_tbl_map_rows_selected)
     }
     else{
-      dataset %>%  
+      filtered_dataset %>%  
         filter(row_number() %in% input$dataset_tbl_map_rows_all)
     }
   })
   
-  output$dataset_tbl_map <-  DT::renderDataTable({
-     dataset %>%   
-      DT::datatable(filter = "top",
-                              rownames = FALSE)
-  })
-  
-  output$dataset_tbl <-  DT::renderDataTable({
-    dataset %>%   
+  getTableData <- reactive({
+    filtered_dataset <- dataset
+    if(!is.null(input$mouse_brush)){
+      brushed_dataset <<- brushedPoints(filtered_dataset, input$mouse_brush)
+    }
+
+    if(!is.null(input$mouse_dblclick)){
+      brushed_dataset <<- NULL
+    }
+    
+    if(!is.null(brushed_dataset)){
+      filtered_dataset <- brushed_dataset 
+    }
+    
+    filtered_dataset %>%   
       DT::datatable(filter = "top",
                     rownames = FALSE)
+  })
+  output$dataset_tbl_map <-  DT::renderDataTable({
+    getTableData()
+  })
+  
+  observeEvent(input$mouse_brush,{
+    output$dataset_tbl_map <-  DT::renderDataTable({
+      getTableData()
+    })
+    
+  })
+  
+  observeEvent(input$mouse_dblclick,{
+    output$dataset_tbl_map <-  DT::renderDataTable({
+      getTableData()
+    })
+    
   })
   
   output$worldmap <- renderLeaflet({
@@ -34,7 +64,7 @@ shinyServer(function(input, output, session) {
                        options = providerTileOptions(noWrap = TRUE)
       ) %>%
       addMarkers(lat = filteredTable_data()$Latitude, lng = filteredTable_data()$Longitude) %>%
-      setView(lng = 0, lat = 10, zoom = 1.5) %>% 
+      setView(lng = 0, lat = 10, zoom = 1) %>% 
       addTiles() %>%
       addMarkers(filteredTable_data()$Longitude, filteredTable_data()$Latitude, popup = filteredTable_data()$Volcano.Name)
   })
@@ -54,6 +84,24 @@ shinyServer(function(input, output, session) {
         #filter(Volcanic.Explosivity.Index >= input$plots_explosivity[1] & Volcanic.Explosivity.Index <= input$plots_explosivity[2])
       
   })
+  
+  output$eruptionsByYear <- renderPlot({
+    filtered_dataset <- filteredTable_data()
+
+    plot<- ggplot(data=filtered_dataset, aes(x=country)) +
+      geom_bar( stat='count' ) + 
+      geom_text(stat='count', aes(label=..count..), vjust=-1) + 
+      ggtitle(paste("Erupciones por País")) +
+      labs(y="Erupciones", x = "País") +
+      theme(axis.text.x=element_text(angle = 45, hjust = 1))
+    
+    if(!is.null(brushed_dataset)){
+      plot <- plot+ geom_bar(data=brushed_dataset, fill="green3")
+    }
+    
+    plot
+  })
+  
   
   output$eruptionsPlot <- renderPlot({
     filtered_dataset <- filteredDataset()

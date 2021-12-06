@@ -15,5 +15,7 @@ dataset<-read.csv("dataset/volcanic_eruption_database.csv") %>%
                  Volcano...Damage..in.M..,
                  ) %>%
           rename("year" = Year) %>%
+          rename("volcano_name" = Volcano.Name) %>%
+          rename("country" = Country) %>%
           rename("deaths" = Volcano...Deaths) %>%
           rename("damage_millions_of_dollars" = Volcano...Damage..in.M..)
