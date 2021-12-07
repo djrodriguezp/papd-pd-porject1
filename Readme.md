@@ -20,6 +20,8 @@ El dashboard fue realizado con shiny y presenta dos tabs, i) Dataset y Mapa y ii
 
 - El histograma y el mapa muestran inicialmente las erupciones de todos los países, pero en la parte de abajo se observa el dataset completo dividido por pages, las tuplas seleccionadas al hacer click se graficarán inmediatamente en el mapa y el histograma.
 
+- Es posible interactuar con el histograma realizando un Brush sobre este, se filtrarán los datos de los países seleccionados. Para eliminar la selección se deberá hacer doble click sobre el histograma.
+
 - En el mapa, los signo + y - son para zoom in y out, respectivamente.
 
 - Al hacer click en la ubicación marcada en el mapa, se presenta el nombre del volcán.
