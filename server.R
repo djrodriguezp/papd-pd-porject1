@@ -92,7 +92,7 @@ shinyServer(function(input, output, session) {
 
     plot<- ggplot(data=filtered_dataset, aes(x=country)) +
       geom_bar( stat='count' ) + 
-      geom_text(stat='count', aes(label=..count..), vjust=-1) + 
+      geom_text(stat='count', aes(label=..count..), vjust=-0.4) + 
       ggtitle(paste("Erupciones por País")) +
       labs(y="Erupciones", x = "País") +
       theme(axis.text.x=element_text(angle = 45, hjust = 1))
@@ -129,7 +129,7 @@ shinyServer(function(input, output, session) {
      }
      
      plot + geom_bar( stat='identity',  fill=input$plots_color ) + 
-     geom_text(stat='identity', aes(label=eruption_count), vjust=-1) + 
+     geom_text(stat='identity', aes(label=eruption_count), vjust=-0.4) + 
      ggtitle(paste("Erupciones por",display_names[[input$plots_xvar]])) +
      labs(y="Erupciones", x =  display_names[[input$plots_xvar]]) +
      theme(axis.text.x=element_text(angle = 45, hjust = 1))
@@ -161,7 +161,7 @@ shinyServer(function(input, output, session) {
       plot <- ggplot(data=filtered_dataset, aes(x=reorder(x_var, -TotalSum), y=TotalSum)) 
     }
     plot<- plot + geom_bar( stat='identity', fill=input$plots_color ) + 
-      geom_text(stat='identity', aes(label=TotalSum), vjust=-1) + 
+      geom_text(stat='identity', aes(label=TotalSum), vjust=-0.4) + 
       ggtitle(paste("Total de",y_label,"por", display_names[[x]])) +
       labs(y=y_label, x = display_names[[x]]) +
       theme(axis.text.x=element_text(angle = 45, hjust = 1))
