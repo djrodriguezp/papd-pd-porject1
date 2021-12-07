@@ -26,7 +26,10 @@ El dashboard fue realizado con shiny y presenta dos tabs, i) Dataset y Mapa y ii
 
 - Al hacer click en la ubicación marcada en el mapa, se presenta el nombre del volcán.
 
-- El search busca la palabra indicada en todas las variables.
+- El search busca la palabra indicada en todas las variables y grafica inmediatamente el histograma y mapa del resultado de la búsqueda.
+
+- En el histograma, al seleccionar con el puntero determinados países, el resultado es un filtro que muestra un nuevo histograma y un nuevo mapa únicamente con la selección.  Para regresar al estado original basta con hacer doble click en el histograma.
+
 
 **ii) Gráficas**
 - Se presentan los histogramas: Erupciones, total de muertes, total de daños en millones de dolares por: año, país, nombre de volcán, tipo de volcán o índice de explosividad. Para variar los histogramas se requiere elegir la variable a utilizar.
