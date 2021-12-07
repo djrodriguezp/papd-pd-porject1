@@ -73,6 +73,11 @@ shinyServer(function(input, output, session) {
   })
   
   
+ 
+  
+  
+  
+  
   filteredDataset <- reactive({
     filtered_dataset <- dataset
       if (length(input$plots_country) > 0){
@@ -87,12 +92,13 @@ shinyServer(function(input, output, session) {
         filter(year >= input$plots_year[1] & year <= input$plots_year[2]) 
   })
   
+  
   output$eruptionsByYear <- renderPlot({
     filtered_dataset <- filteredTable_data()
 
     plot<- ggplot(data=filtered_dataset, aes(x=country)) +
       geom_bar( stat='count' ) + 
-      geom_text(stat='count', aes(label=..count..), vjust=-0.4) + 
+      geom_text(stat='count', aes(label=..count..), vjust=-1) + 
       ggtitle(paste("Erupciones por País")) +
       labs(y="Erupciones", x = "País") +
       theme(axis.text.x=element_text(angle = 45, hjust = 1))
@@ -129,7 +135,7 @@ shinyServer(function(input, output, session) {
      }
      
      plot + geom_bar( stat='identity',  fill=input$plots_color ) + 
-     geom_text(stat='identity', aes(label=eruption_count), vjust=-0.4) + 
+     geom_text(stat='identity', aes(label=eruption_count), vjust=-1) + 
      ggtitle(paste("Erupciones por",display_names[[input$plots_xvar]])) +
      labs(y="Erupciones", x =  display_names[[input$plots_xvar]]) +
      theme(axis.text.x=element_text(angle = 45, hjust = 1))
@@ -161,7 +167,7 @@ shinyServer(function(input, output, session) {
       plot <- ggplot(data=filtered_dataset, aes(x=reorder(x_var, -TotalSum), y=TotalSum)) 
     }
     plot<- plot + geom_bar( stat='identity', fill=input$plots_color ) + 
-      geom_text(stat='identity', aes(label=TotalSum), vjust=-0.4) + 
+      geom_text(stat='identity', aes(label=TotalSum), vjust=-1) + 
       ggtitle(paste("Total de",y_label,"por", display_names[[x]])) +
       labs(y=y_label, x = display_names[[x]]) +
       theme(axis.text.x=element_text(angle = 45, hjust = 1))
@@ -175,4 +181,49 @@ shinyServer(function(input, output, session) {
   output$damagePlot <- renderPlot({
     SummarizePlot(input$plots_xvar, "damage_millions_of_dollars", "Daños en Millones de Dólares")
   })
+  
+
+  
+  
+  
+  #################################################################### 
+  
+  observe({
+    query <- parseQueryString(session$clientData$url_search)
+    plots_xvar <- query[['plots_xvar']]
+    plots_top <- query[['plots_top']]
+    plots_color <- query[['plots_color']]
+    
+    if(!is.null(plots_xvar)){
+      updateTabsetPanel(session, 'tabs', selected = "Graficas")
+      updateSelectInput(session, 'plots_xvar', selected = plots_xvar)
+    }
+    if(!is.null(plots_top)){
+      updateNumericInput(session, 'plots_top', value = as.numeric(plots_top))
+    }
+    if(!is.null(plots_color)){
+      updateSelectInput(session, 'plots_color', selected = plots_color)
+    }
+  })
+  
+  observe({
+    plots_xvar <- input$plots_xvar
+    plots_top <- input$plots_top
+    plots_color <- input$plots_color
+    
+    host_name <- session$clientData$url_hostname
+    protocol <- session$clientData$url_protocol
+    port <- session$clientData$url_port
+    
+    query <- paste('?', 'plots_xvar=', plots_xvar, '&plots_top=', plots_top, '&plots_color=', plots_color, sep = '')
+    url <- paste(protocol, '//', host_name, ':', port, '/', query, sep = '')
+    updateTextInput(session, 'url_param', value = url)
+    
+  })
+  
+  ####################################################################  
+  
+  
+  
+  
 })

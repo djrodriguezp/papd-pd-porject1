@@ -7,7 +7,7 @@ shinyUI(fluidPage(
 
     titlePanel("Erupciones Volcánicas"),
     
-    tabsetPanel(#selected="Graficas", 
+    tabsetPanel(id = 'tabs',#selected="Graficas",
                 tabPanel("Dataset y Mapa", 
                          fluidRow(
                            column(6,
@@ -25,7 +25,7 @@ shinyUI(fluidPage(
                                   DT::dataTableOutput("dataset_tbl_map")
                                   )
                ),
-                tabPanel("Gráficas",  
+                tabPanel("Graficas",  
                          sidebarLayout(
                            sidebarPanel(
                              selectInput("plots_xvar","Variable X", c("volcano_name","country", "year","volcano_type", "explosivity_index"), selected = "volcano_name"),
@@ -39,6 +39,7 @@ shinyUI(fluidPage(
                              selectInput("plots_country","País", unique(dataset$country), multiple = TRUE),
                              selectInput("plots_volcano_type","Tipo de Volcán", unique(dataset$volcano_type), multiple = TRUE),
                              selectInput("plots_color","Color de Gráficas", colors_list , selected = "skyblue"),
+                             textInput('url_param', 'Marcador:', value = '')
                            ), 
                            mainPanel(
                              plotOutput("eruptionsPlot"),
