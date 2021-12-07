@@ -214,9 +214,10 @@ shinyServer(function(input, output, session) {
     host_name <- session$clientData$url_hostname
     protocol <- session$clientData$url_protocol
     port <- session$clientData$url_port
+    url_path <- session$clientData$url_pathname
     
     query <- paste('?', 'plots_xvar=', plots_xvar, '&plots_top=', plots_top, '&plots_color=', plots_color, sep = '')
-    url <- paste(protocol, '//', host_name, ':', port, '/', query, sep = '')
+    url <- paste(protocol, '//', host_name, ':', port, url_path, query, sep = '')
     updateTextInput(session, 'url_param', value = url)
     
   })

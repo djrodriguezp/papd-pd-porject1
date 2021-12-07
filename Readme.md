@@ -3,7 +3,9 @@
 ## Postgrado en Análsis y Predicción de Datos
 ## Product Development - Proyecto 1
 ## Antonio Navas, Daniel Rodríguez y Luis Florian
-
+##Shiny App
+- [Página Principal](https://drodriguezp.shinyapps.io/project1/)
+- [Párametros URL](https://drodriguezp.shinyapps.io/project1/?plots_xvar=volcano_name&plots_top=25&plots_color=magenta)
 ### Dashboard de Erupciones Volcánicas
 
 - Dataset
@@ -31,10 +33,3 @@ También podemos variar la cantidad de resultados, ordenarlo por orden ascendent
 Se puede filtrar los datos de los histogramas por país, tipo de volcán, establecer el color de las gráficas entre 19 opciones de colores.
 
 Por último se genera una url para visalizar el dashboard por html. Esta dirección inicia mostrando la pestaña de gráficas.
-
-
-
-
-
-
-
