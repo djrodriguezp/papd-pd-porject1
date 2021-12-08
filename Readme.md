@@ -3,8 +3,10 @@
 ### Postgrado en Análsis y Predicción de Datos
 ### Product Development - Proyecto 1
 ### Antonio Navas, Daniel Rodríguez y Luis Florian
-<br>
+<br />
+
 ## Shiny App
+
 - [Página Principal](https://drodriguezp.shinyapps.io/project1/)
 - [Párametros URL](https://drodriguezp.shinyapps.io/project1/?plots_xvar=volcano_name&plots_top=25&plots_color=orange)
 
